@@ -50,9 +50,7 @@ class UtilStaticResponse extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        // parse json
-        $parser   = $this->templateFactory->newTextParser();
-        $response = $parser->parse($request, $context, $configuration->get('response'));
+        $response = $configuration->get('response');
 
         if (!empty($response)) {
             $statusCode = $configuration->get('statusCode') ?: 200;

@@ -1,16 +1,6 @@
 {
   "actionClass": [
     "Fusio\\Adapter\\Util\\Action\\UtilCache",
-    "Fusio\\Adapter\\Util\\Action\\UtilComposite",
-    "Fusio\\Adapter\\Util\\Action\\UtilCondition",
-    "Fusio\\Adapter\\Util\\Action\\UtilPipe",
-    "Fusio\\Adapter\\Util\\Action\\UtilProcessor",
-    "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
-    "Fusio\\Adapter\\Util\\Action\\UtilTransform",
-    "Fusio\\Adapter\\Util\\Action\\UtilTryCatch",
-    "Fusio\\Adapter\\Util\\Action\\UtilValidator"
-  ],
-  "connectionClass": [
-    "Fusio\\Adapter\\Util\\Connection\\Native"
+    "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse"
   ]
 }
