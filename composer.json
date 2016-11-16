@@ -14,7 +14,6 @@
   "require": {
     "php": ">=5.5",
     "doctrine/dbal": "^2.5",
-    "symfony/expression-language": "^2.8",
     "fusio/engine": "^0.5@dev"
   },
   "require-dev": {
