@@ -71,7 +71,7 @@ class UtilCache extends ActionAbstract
     {
         $builder->add($elementFactory->newConnection('connection', 'Connection', 'Connection to a memcache or redis server'));
         $builder->add($elementFactory->newAction('action', 'Action', 'The response of this action is cached'));
-        $builder->add($elementFactory->newInput('expire', 'Expire', 'number', 'Number of seconds when the cache expires. 0 means infinite cache lifetime.'));
+        $builder->add($elementFactory->newInput('expire', 'Expire', 'number', 'Number of seconds when the cache expires. 0 means infinite cache lifetime'));
     }
 
     /**

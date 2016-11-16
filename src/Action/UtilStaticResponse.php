@@ -64,6 +64,6 @@ class UtilStaticResponse extends ActionAbstract
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
     {
         $builder->add($elementFactory->newSelect('statusCode', 'Status-Code', Http::$codes, 'The returned status code'));
-        $builder->add($elementFactory->newTextArea('response', 'Response', 'json', 'The response in JSON format. Inside the response it is possible to use a template syntax to add dynamic data. Click <a ng-click="help.showDialog(\'help/template.md\')">here</a> for more informations about the template syntax.'));
+        $builder->add($elementFactory->newTextArea('response', 'Response', 'json', 'The response in JSON format'));
     }
 }
