@@ -23,13 +23,10 @@ namespace Fusio\Adapter\Util\Action;
 
 use Doctrine\Common\Cache;
 use Fusio\Engine\ActionAbstract;
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\RequestInterface;
 
 /**

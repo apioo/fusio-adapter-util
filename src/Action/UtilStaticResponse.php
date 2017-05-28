@@ -22,15 +22,12 @@
 namespace Fusio\Adapter\Util\Action;
 
 use Fusio\Engine\ActionAbstract;
-use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Exception\ConfigurationException;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Engine\Response\FactoryInterface as ResponseFactoryInterface;
-use Fusio\Engine\Template\FactoryInterface;
 use PSX\Http\Http;
 use PSX\Json\Parser;
 
