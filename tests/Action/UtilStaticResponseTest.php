@@ -24,9 +24,8 @@ namespace Fusio\Adapter\Util\Tests\Action;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Form\Builder;
 use Fusio\Engine\Form\Container;
-use Fusio\Engine\ResponseInterface;
 use Fusio\Engine\Test\EngineTestCaseTrait;
-use PSX\Framework\Test\Environment;
+use PSX\Http\Environment\HttpResponseInterface;
 
 /**
  * UtilStaticResponseTest
@@ -52,7 +51,7 @@ class UtilStaticResponseTest extends \PHPUnit_Framework_TestCase
         $body = new \stdClass();
         $body->foo = 'bar';
 
-        $this->assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertInstanceOf(HttpResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($body, $response->getBody());

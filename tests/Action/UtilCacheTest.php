@@ -27,11 +27,10 @@ use Fusio\Engine\Form\Container;
 use Fusio\Engine\Model\Action;
 use Fusio\Engine\Model\Connection;
 use Fusio\Engine\Response;
-use Fusio\Engine\ResponseInterface;
 use Fusio\Engine\Test\CallbackAction;
 use Fusio\Engine\Test\CallbackConnection;
 use Fusio\Engine\Test\EngineTestCaseTrait;
-use PSX\Framework\Test\Environment;
+use PSX\Http\Environment\HttpResponseInterface;
 
 /**
  * UtilCacheTest
@@ -90,7 +89,7 @@ class UtilCacheTest extends \PHPUnit_Framework_TestCase
         $action   = $this->getActionFactory()->factory(UtilCache::class);
         $response = $action->handle($this->getRequest(), $parameters, $this->getContext());
 
-        $this->assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertInstanceOf(HttpResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals(['id' => 1, 'title' => 'foo', 'content' => 'bar', 'date' => '2015-02-27 19:59:15'], $response->getBody());
@@ -99,7 +98,7 @@ class UtilCacheTest extends \PHPUnit_Framework_TestCase
         for ($i = 0; $i < 10; $i++) {
             $response = $action->handle($this->getRequest(), $parameters, $this->getContext());
 
-            $this->assertInstanceOf(ResponseInterface::class, $response);
+            $this->assertInstanceOf(HttpResponseInterface::class, $response);
             $this->assertEquals(200, $response->getStatusCode());
             $this->assertEquals([], $response->getHeaders());
             $this->assertEquals(['id' => 1, 'title' => 'foo', 'content' => 'bar', 'date' => '2015-02-27 19:59:15'], $response->getBody());
