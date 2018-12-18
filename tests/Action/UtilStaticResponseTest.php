@@ -25,6 +25,7 @@ use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Form\Builder;
 use Fusio\Engine\Form\Container;
 use Fusio\Engine\Test\EngineTestCaseTrait;
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Environment\HttpResponseInterface;
 
 /**
@@ -34,7 +35,7 @@ use PSX\Http\Environment\HttpResponseInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class UtilStaticResponseTest extends \PHPUnit_Framework_TestCase
+class UtilStaticResponseTest extends TestCase
 {
     use EngineTestCaseTrait;
 

@@ -30,6 +30,7 @@ use Fusio\Engine\Response;
 use Fusio\Engine\Test\CallbackAction;
 use Fusio\Engine\Test\CallbackConnection;
 use Fusio\Engine\Test\EngineTestCaseTrait;
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Environment\HttpResponseInterface;
 
 /**
@@ -39,7 +40,7 @@ use PSX\Http\Environment\HttpResponseInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class UtilCacheTest extends \PHPUnit_Framework_TestCase
+class UtilCacheTest extends TestCase
 {
     use EngineTestCaseTrait;
 
