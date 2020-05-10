@@ -61,6 +61,6 @@ class UtilJsonPatch extends ActionAbstract
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
     {
         $builder->add($elementFactory->newAction('action', 'Action', 'This action receives the transformed JSON data'));
-        $builder->add($elementFactory->newTextArea('patch', 'Patch', 'json', 'Contains an array of JSON patch operations'));
+        $builder->add($elementFactory->newTextArea('patch', 'Patch', 'json', 'Contains an array of JSON patch operations, more information about JSON patch at https://tools.ietf.org/html/rfc6902'));
     }
 }
