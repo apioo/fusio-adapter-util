@@ -21,7 +21,6 @@
 
 namespace Fusio\Adapter\Util\Action;
 
-use Doctrine\Common\Cache;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Form\BuilderInterface;
@@ -63,27 +62,5 @@ class UtilJsonPatch extends ActionAbstract
     {
         $builder->add($elementFactory->newAction('action', 'Action', 'This action receives the transformed JSON data'));
         $builder->add($elementFactory->newTextArea('patch', 'Patch', 'json', 'Contains an array of JSON patch operations'));
-    }
-
-    /**
-     * @param mixed $connection
-     * @return \Doctrine\Common\Cache\CacheProvider
-     */
-    protected function getCacheHandler($connection): ?Cache\CacheProvider
-    {
-        if ($connection instanceof \Memcache) {
-            $handler = new Cache\MemcacheCache();
-            $handler->setMemcache($connection);
-        } elseif ($connection instanceof \Memcached) {
-            $handler = new Cache\MemcachedCache();
-            $handler->setMemcached($connection);
-        } elseif ($connection instanceof \Redis) {
-            $handler = new Cache\RedisCache();
-            $handler->setRedis($connection);
-        } else {
-            return null;
-        }
-
-        return $handler;
     }
 }
