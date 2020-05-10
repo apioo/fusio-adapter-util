@@ -28,6 +28,8 @@ use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Psr\SimpleCache\CacheInterface;
+use PSX\Cache\SimpleCache;
 
 /**
  * UtilCache
@@ -39,9 +41,9 @@ use Fusio\Engine\RequestInterface;
 class UtilCache extends ActionAbstract
 {
     /**
-     * @var \Doctrine\Common\Cache\CacheProvider
+     * @var \Psr\SimpleCache\CacheInterface
      */
-    protected static $handler;
+    private static $handler;
 
     public function getName()
     {
@@ -50,15 +52,15 @@ class UtilCache extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        $key = md5($configuration->get('action') . json_encode($request->getUriFragments()) . json_encode($request->getParameters()));
+        $key = md5($configuration->get('action') . $request->getMethod() . json_encode($request->getUriFragments()) . json_encode($request->getParameters()));
 
         $handler  = $this->getCacheHandler($this->connector->getConnection($configuration->get('connection')));
-        $response = $handler->fetch($key);
+        $response = $handler->get($key);
 
-        if ($response === false) {
+        if (empty($response)) {
             $response = $this->processor->execute($configuration->get('action'), $request, $context);
 
-            $handler->save($key, $response, $configuration->get('expire'));
+            $handler->set($key, $response, (int) $configuration->get('expire'));
         }
 
         return $response;
@@ -66,21 +68,22 @@ class UtilCache extends ActionAbstract
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
     {
-        $builder->add($elementFactory->newConnection('connection', 'Connection', 'Connection to a memcache or redis server'));
         $builder->add($elementFactory->newAction('action', 'Action', 'The response of this action is cached'));
         $builder->add($elementFactory->newInput('expire', 'Expire', 'number', 'Number of seconds when the cache expires. 0 means infinite cache lifetime'));
+        $builder->add($elementFactory->newConnection('connection', 'Connection', 'Optional connection to a memcache or redis server otherwise the system cache is used'));
     }
 
     /**
      * @param mixed $connection
-     * @return \Doctrine\Common\Cache\CacheProvider
+     * @return \Psr\SimpleCache\CacheInterface
      */
-    protected function getCacheHandler($connection)
+    private function getCacheHandler($connection): CacheInterface
     {
         if (self::$handler) {
             return self::$handler;
         }
 
+        $handler = null;
         if ($connection instanceof \Memcache) {
             $handler = new Cache\MemcacheCache();
             $handler->setMemcache($connection);
@@ -90,10 +93,12 @@ class UtilCache extends ActionAbstract
         } elseif ($connection instanceof \Redis) {
             $handler = new Cache\RedisCache();
             $handler->setRedis($connection);
-        } else {
-            $handler = new Cache\ArrayCache();
         }
 
-        return self::$handler = $handler;
+        if ($handler !== null) {
+            return self::$handler = new SimpleCache($handler);
+        } else {
+            return self::$handler = $this->cache;
+        }
     }
 }
