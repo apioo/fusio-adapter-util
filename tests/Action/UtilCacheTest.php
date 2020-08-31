@@ -44,7 +44,7 @@ class UtilCacheTest extends TestCase
 {
     use EngineTestCaseTrait;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $connection = new Connection();
         $connection->setId(1);

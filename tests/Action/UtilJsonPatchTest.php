@@ -43,7 +43,7 @@ class UtilJsonPatchTest extends TestCase
 {
     use EngineTestCaseTrait;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $action = new Action();
         $action->setId(1);
