@@ -50,9 +50,7 @@ class UtilStaticResponse extends ActionAbstract
         $response = $configuration->get('response');
 
         if (!empty($response)) {
-            $statusCode = $configuration->get('statusCode') ?: 200;
-
-            return $this->response->build($statusCode, [], Parser::decode($response, false));
+            return $this->response->build(200, [], Parser::decode($response, false));
         } else {
             throw new ConfigurationException('No response defined');
         }
@@ -60,7 +58,6 @@ class UtilStaticResponse extends ActionAbstract
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
     {
-        $builder->add($elementFactory->newSelect('statusCode', 'Status-Code', Http::$codes, 'The returned status code'));
         $builder->add($elementFactory->newTextArea('response', 'Response', 'json', 'The response in JSON format'));
     }
 }
