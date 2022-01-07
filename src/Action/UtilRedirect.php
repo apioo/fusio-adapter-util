@@ -3,7 +3,7 @@
  * Fusio
  * A web-application to create dynamically RESTful APIs
  *
- * Copyright (C) 2015-2020 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -28,22 +28,23 @@ use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use PSX\Http\Environment\HttpResponseInterface;
 
 /**
  * UtilRedirect
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
- * @link    http://fusio-project.org
+ * @link    https://www.fusio-project.org/
  */
 class UtilRedirect extends ActionAbstract
 {
-    public function getName()
+    public function getName(): string
     {
         return 'Util-Redirect';
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
     {
         $location = $configuration->get('location');
         if (!empty($location)) {
@@ -53,7 +54,7 @@ class UtilRedirect extends ActionAbstract
         }
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
         $builder->add($elementFactory->newInput('location', 'Location', 'text', 'The redirect location'));
     }

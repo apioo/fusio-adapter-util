@@ -3,7 +3,7 @@
  * Fusio
  * A web-application to create dynamically RESTful APIs
  *
- * Copyright (C) 2015-2020 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -27,6 +27,7 @@ use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Json\Patch;
 
 /**
@@ -34,16 +35,16 @@ use PSX\Json\Patch;
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
- * @link    http://fusio-project.org
+ * @link    https://www.fusio-project.org/
  */
 class UtilJsonPatch extends ActionAbstract
 {
-    public function getName()
+    public function getName(): string
     {
         return 'Util-JSON-Patch';
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
     {
         $body = $request->getBody();
 
@@ -58,7 +59,7 @@ class UtilJsonPatch extends ActionAbstract
         return $this->processor->execute($configuration->get('action'), $request->withBody($body), $context);
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
         $builder->add($elementFactory->newAction('action', 'Action', 'This action receives the transformed JSON data'));
         $builder->add($elementFactory->newTextArea('patch', 'Patch', 'json', 'Contains an array of JSON patch operations, more information about JSON patch at https://tools.ietf.org/html/rfc6902'));

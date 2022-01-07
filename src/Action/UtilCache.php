@@ -3,7 +3,7 @@
  * Fusio
  * A web-application to create dynamically RESTful APIs
  *
- * Copyright (C) 2015-2020 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -21,7 +21,6 @@
 
 namespace Fusio\Adapter\Util\Action;
 
-use Doctrine\Common\Cache;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Form\BuilderInterface;
@@ -29,28 +28,28 @@ use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Psr\SimpleCache\CacheInterface;
-use PSX\Cache\SimpleCache;
+use PSX\Http\Environment\HttpResponseInterface;
+use Symfony\Component\Cache\Adapter\MemcachedAdapter;
+use Symfony\Component\Cache\Adapter\RedisAdapter;
+use Symfony\Component\Cache\Psr16Cache;
 
 /**
  * UtilCache
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
- * @link    http://fusio-project.org
+ * @link    https://www.fusio-project.org/
  */
 class UtilCache extends ActionAbstract
 {
-    /**
-     * @var \Psr\SimpleCache\CacheInterface
-     */
-    private static $handler;
+    private static ?CacheInterface $handler = null;
 
-    public function getName()
+    public function getName(): string
     {
         return 'Util-Cache';
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
     {
         $key = md5($configuration->get('action') . $request->getMethod() . json_encode($request->getUriFragments()) . json_encode($request->getParameters()));
 
@@ -66,37 +65,28 @@ class UtilCache extends ActionAbstract
         return $response;
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
         $builder->add($elementFactory->newAction('action', 'Action', 'The response of this action is cached'));
         $builder->add($elementFactory->newInput('expire', 'Expire', 'number', 'Number of seconds when the cache expires. 0 means infinite cache lifetime'));
         $builder->add($elementFactory->newConnection('connection', 'Connection', 'Optional connection to a memcache or redis server otherwise the system cache is used'));
     }
 
-    /**
-     * @param mixed $connection
-     * @return \Psr\SimpleCache\CacheInterface
-     */
-    private function getCacheHandler($connection): CacheInterface
+    private function getCacheHandler(mixed $connection): CacheInterface
     {
         if (self::$handler) {
             return self::$handler;
         }
 
         $handler = null;
-        if ($connection instanceof \Memcache) {
-            $handler = new Cache\MemcacheCache();
-            $handler->setMemcache($connection);
-        } elseif ($connection instanceof \Memcached) {
-            $handler = new Cache\MemcachedCache();
-            $handler->setMemcached($connection);
+        if ($connection instanceof \Memcached) {
+            $handler = new MemcachedAdapter($connection);
         } elseif ($connection instanceof \Redis) {
-            $handler = new Cache\RedisCache();
-            $handler->setRedis($connection);
+            $handler = new RedisAdapter($connection);
         }
 
         if ($handler !== null) {
-            return self::$handler = new SimpleCache($handler);
+            return self::$handler = new Psr16Cache($handler);
         } else {
             return self::$handler = $this->cache;
         }
