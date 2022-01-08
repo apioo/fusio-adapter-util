@@ -47,11 +47,7 @@ class UtilABTestTest extends TestCase
 
     protected function setUp(): void
     {
-        $action = new Action();
-        $action->setId(1);
-        $action->setName('a');
-        $action->setClass(CallbackAction::class);
-        $action->setConfig([
+        $action = new Action(1, 'a', CallbackAction::class, '', false, [
             'callback' => function(Response\FactoryInterface $response){
                 return $response->build(200, [], ['a' => true]);
             },
@@ -59,11 +55,7 @@ class UtilABTestTest extends TestCase
 
         $this->getActionRepository()->add($action);
 
-        $action = new Action();
-        $action->setId(2);
-        $action->setName('b');
-        $action->setClass(CallbackAction::class);
-        $action->setConfig([
+        $action = new Action(2, 'b', CallbackAction::class, '', false, [
             'callback' => function(Response\FactoryInterface $response){
                 return $response->build(200, [], ['b' => true]);
             },

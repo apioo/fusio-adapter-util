@@ -58,11 +58,10 @@ class UtilStaticResponseTest extends TestCase
         $this->assertEquals($body, $response->getBody());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testHandleInvalidResponseFormat()
     {
+        $this->expectException(\JsonException::class);
+
         $parameters = $this->getParameters([
             'statusCode' => 200,
             'response' => '<foo />',

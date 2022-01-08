@@ -46,11 +46,7 @@ class UtilCacheTest extends TestCase
 
     protected function setUp(): void
     {
-        $connection = new Connection();
-        $connection->setId(1);
-        $connection->setName('foo');
-        $connection->setClass(CallbackConnection::class);
-        $connection->setConfig([
+        $connection = new Connection(1, 'foo', CallbackConnection::class, [
             'callback' => function(){
                 return new \stdClass();
             },
@@ -58,11 +54,7 @@ class UtilCacheTest extends TestCase
 
         $this->getConnectionRepository()->add($connection);
 
-        $action = new Action();
-        $action->setId(1);
-        $action->setName('foo');
-        $action->setClass(CallbackAction::class);
-        $action->setConfig([
+        $action = new Action(1, 'foo', CallbackAction::class, '', false, [
             'callback' => function(Response\FactoryInterface $response){
                 // make sure that this is only called once
                 static $count = 0;

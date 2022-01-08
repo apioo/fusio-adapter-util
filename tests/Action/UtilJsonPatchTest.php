@@ -45,11 +45,7 @@ class UtilJsonPatchTest extends TestCase
 
     protected function setUp(): void
     {
-        $action = new Action();
-        $action->setId(1);
-        $action->setName('foo');
-        $action->setClass(CallbackAction::class);
-        $action->setConfig([
+        $action = new Action(1, 'foo', CallbackAction::class, '', false, [
             'callback' => function(Response\FactoryInterface $response, $request){
                 return $response->build(200, [], $request->getBody());
             },
