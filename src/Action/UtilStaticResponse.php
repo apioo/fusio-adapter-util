@@ -29,7 +29,6 @@ use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use PSX\Http\Environment\HttpResponseInterface;
-use PSX\Http\Http;
 use PSX\Json\Parser;
 
 /**
@@ -49,12 +48,11 @@ class UtilStaticResponse extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
     {
         $response = $configuration->get('response');
-
-        if (!empty($response)) {
-            return $this->response->build(200, [], Parser::decode($response, false));
-        } else {
+        if (empty($response)) {
             throw new ConfigurationException('No response defined');
         }
+
+        return $this->response->build(200, [], Parser::decode($response, false));
     }
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void

@@ -47,11 +47,11 @@ class UtilRedirect extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
     {
         $location = $configuration->get('location');
-        if (!empty($location)) {
-            return $this->response->build(301, ['Location' => $location], null);
-        } else {
+        if (empty($location)) {
             throw new ConfigurationException('No location defined');
         }
+
+        return $this->response->build(301, ['Location' => $location], null);
     }
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void

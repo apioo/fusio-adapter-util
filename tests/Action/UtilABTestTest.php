@@ -22,14 +22,11 @@
 namespace Fusio\Adapter\Util\Tests\Action;
 
 use Fusio\Adapter\Util\Action\UtilABTest;
-use Fusio\Adapter\Util\Action\UtilCache;
 use Fusio\Engine\Form\Builder;
 use Fusio\Engine\Form\Container;
 use Fusio\Engine\Model\Action;
-use Fusio\Engine\Model\Connection;
 use Fusio\Engine\Response;
 use Fusio\Engine\Test\CallbackAction;
-use Fusio\Engine\Test\CallbackConnection;
 use Fusio\Engine\Test\EngineTestCaseTrait;
 use PHPUnit\Framework\TestCase;
 use PSX\Http\Environment\HttpResponseInterface;
