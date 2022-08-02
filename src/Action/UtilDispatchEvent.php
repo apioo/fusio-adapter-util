@@ -23,6 +23,7 @@ namespace Fusio\Adapter\Util\Action;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
+use Fusio\Engine\Exception\ConfigurationException;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
@@ -45,7 +46,12 @@ class UtilDispatchEvent extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
     {
-        $this->dispatcher->dispatch($configuration->get('event'), $request->getPayload());
+        $eventName = $configuration->get('event');
+        if (empty($eventName)) {
+            throw new ConfigurationException('No event defined');
+        }
+
+        $this->dispatcher->dispatch($eventName, $request->getPayload());
 
         return $this->response->build(202, [], [
             'success' => true,
