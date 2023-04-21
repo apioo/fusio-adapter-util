@@ -14,7 +14,7 @@
   "require": {
     "php": ">=8.0",
     "fusio/engine": "^5.0",
-    "psx/json": "^2.0",
+    "psx/json": "^2.0|^3.0",
     "symfony/cache": "^6.0"
   },
   "require-dev": {
