@@ -1,9 +1,0 @@
-{
-  "actionClass": [
-    "Fusio\\Adapter\\Util\\Action\\UtilABTest",
-    "Fusio\\Adapter\\Util\\Action\\UtilCache",
-    "Fusio\\Adapter\\Util\\Action\\UtilJsonPatch",
-    "Fusio\\Adapter\\Util\\Action\\UtilRedirect",
-    "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse"
-  ]
-}
