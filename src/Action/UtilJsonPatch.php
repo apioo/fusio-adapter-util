@@ -26,9 +26,11 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\Request;
 use Fusio\Engine\RequestInterface;
 use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Json\Patch;
+use PSX\Record\RecordInterface;
 
 /**
  * UtilJsonPatch
@@ -46,7 +48,7 @@ class UtilJsonPatch extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
     {
-        $body = $request->getBody();
+        $body = $request->getPayload();
 
         $operations = json_decode($configuration->get('patch'));
         if (!is_array($operations)) {
@@ -54,9 +56,15 @@ class UtilJsonPatch extends ActionAbstract
         }
 
         $patch = new Patch($operations);
-        $body  = $patch->patch($body);
+        if (is_array($body) || $body instanceof \stdClass || $body instanceof RecordInterface) {
+            $body = $patch->patch($body);
+        }
 
-        return $this->processor->execute($configuration->get('action'), $request->withBody($body), $context);
+        if ($request instanceof Request) {
+            $request = $request->withPayload($body);
+        }
+
+        return $this->processor->execute($configuration->get('action'), $request, $context);
     }
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void

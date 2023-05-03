@@ -22,13 +22,12 @@
 namespace Fusio\Adapter\Util\Tests\Action;
 
 use Fusio\Adapter\Util\Action\UtilABTest;
+use Fusio\Adapter\Util\Tests\UtilTestCase;
 use Fusio\Engine\Form\Builder;
 use Fusio\Engine\Form\Container;
 use Fusio\Engine\Model\Action;
 use Fusio\Engine\Response;
 use Fusio\Engine\Test\CallbackAction;
-use Fusio\Engine\Test\EngineTestCaseTrait;
-use PHPUnit\Framework\TestCase;
 use PSX\Http\Environment\HttpResponseInterface;
 
 /**
@@ -38,10 +37,8 @@ use PSX\Http\Environment\HttpResponseInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org/
  */
-class UtilABTestTest extends TestCase
+class UtilABTestTest extends UtilTestCase
 {
-    use EngineTestCaseTrait;
-
     protected function setUp(): void
     {
         $action = new Action(1, 'a', CallbackAction::class, '', false, [

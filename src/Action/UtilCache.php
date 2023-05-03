@@ -27,6 +27,7 @@ use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Request\HttpRequest;
+use Fusio\Engine\Request\RpcRequest;
 use Fusio\Engine\RequestInterface;
 use Psr\SimpleCache\CacheInterface;
 use PSX\Http\Environment\HttpResponseInterface;
@@ -52,13 +53,7 @@ class UtilCache extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
     {
-        $requestContext = $request->getContext();
-        if ($requestContext instanceof HttpRequest) {
-            $key = md5($configuration->get('action') . $requestContext->getMethod() . json_encode($requestContext->getUriFragments()) . json_encode($requestContext->getParameters()));
-        } else {
-            $key = md5($configuration->get('action') . $requestContext->getMethod());
-        }
-
+        $key = $this->getCacheKey($request, $configuration);
         $handler  = $this->getCacheHandler($this->connector->getConnection($configuration->get('connection')));
         $response = $handler->get($key);
 
@@ -78,6 +73,9 @@ class UtilCache extends ActionAbstract
         $builder->add($elementFactory->newConnection('connection', 'Connection', 'Optional connection to a memcache or redis server otherwise the system cache is used'));
     }
 
+    /**
+     * @psalm-suppress UndefinedClass
+     */
     private function getCacheHandler(mixed $connection): CacheInterface
     {
         if (self::$handler) {
@@ -95,6 +93,18 @@ class UtilCache extends ActionAbstract
             return self::$handler = new Psr16Cache($handler);
         } else {
             return self::$handler = $this->cache;
+        }
+    }
+
+    private function getCacheKey(RequestInterface $request, ParametersInterface $configuration): string
+    {
+        $requestContext = $request->getContext();
+        if ($requestContext instanceof HttpRequest) {
+            return md5($configuration->get('action') . $requestContext->getMethod() . json_encode($requestContext->getUriFragments()) . json_encode($requestContext->getParameters()));
+        } elseif ($requestContext instanceof RpcRequest) {
+            return md5($configuration->get('action') . $requestContext->getMethod());
+        } else {
+            return md5($configuration->get('action'));
         }
     }
 }

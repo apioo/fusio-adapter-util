@@ -22,9 +22,8 @@
 namespace Fusio\Adapter\Util\Tests\Action;
 
 use Fusio\Adapter\Util\Action\UtilDispatchEvent;
+use Fusio\Adapter\Util\Tests\UtilTestCase;
 use Fusio\Engine\Exception\ConfigurationException;
-use Fusio\Engine\Test\EngineTestCaseTrait;
-use PHPUnit\Framework\TestCase;
 use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Record\Record;
 
@@ -35,10 +34,8 @@ use PSX\Record\Record;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org/
  */
-class UtilDispatchEventTest extends TestCase
+class UtilDispatchEventTest extends UtilTestCase
 {
-    use EngineTestCaseTrait;
-
     public function testHandle()
     {
         $parameters = $this->getParameters([

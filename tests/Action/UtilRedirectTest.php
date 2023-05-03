@@ -22,11 +22,10 @@
 namespace Fusio\Adapter\Util\Tests\Action;
 
 use Fusio\Adapter\Util\Action\UtilRedirect;
+use Fusio\Adapter\Util\Tests\UtilTestCase;
 use Fusio\Engine\Exception\ConfigurationException;
 use Fusio\Engine\Form\Builder;
 use Fusio\Engine\Form\Container;
-use Fusio\Engine\Test\EngineTestCaseTrait;
-use PHPUnit\Framework\TestCase;
 use PSX\Http\Environment\HttpResponseInterface;
 
 /**
@@ -36,10 +35,8 @@ use PSX\Http\Environment\HttpResponseInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org/
  */
-class UtilRedirectTest extends TestCase
+class UtilRedirectTest extends UtilTestCase
 {
-    use EngineTestCaseTrait;
-
     public function testHandle()
     {
         $parameters = $this->getParameters([

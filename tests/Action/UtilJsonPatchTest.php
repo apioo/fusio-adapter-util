@@ -22,13 +22,12 @@
 namespace Fusio\Adapter\Util\Tests\Action;
 
 use Fusio\Adapter\Util\Action\UtilJsonPatch;
+use Fusio\Adapter\Util\Tests\UtilTestCase;
 use Fusio\Engine\Form\Builder;
 use Fusio\Engine\Form\Container;
 use Fusio\Engine\Model\Action;
 use Fusio\Engine\Response;
 use Fusio\Engine\Test\CallbackAction;
-use Fusio\Engine\Test\EngineTestCaseTrait;
-use PHPUnit\Framework\TestCase;
 use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Record\Record;
 
@@ -39,15 +38,13 @@ use PSX\Record\Record;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org/
  */
-class UtilJsonPatchTest extends TestCase
+class UtilJsonPatchTest extends UtilTestCase
 {
-    use EngineTestCaseTrait;
-
     protected function setUp(): void
     {
         $action = new Action(1, 'foo', CallbackAction::class, '', false, [
             'callback' => function(Response\FactoryInterface $response, $request){
-                return $response->build(200, [], $request->getBody());
+                return $response->build(200, [], $request->getPayload());
             },
         ]);
 
@@ -84,7 +81,7 @@ JSON;
         ]);
 
         $request = $this->getRequest();
-        $request = $request->withBody(Record::fromStdClass(json_decode($body)));
+        $request = $request->withPayload(Record::fromStdClass(json_decode($body)));
 
         $action   = $this->getActionFactory()->factory(UtilJsonPatch::class);
         $response = $action->handle($request, $parameters, $this->getContext());
