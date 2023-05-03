@@ -26,6 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\Request\HttpRequest;
 use Fusio\Engine\RequestInterface;
 use Psr\SimpleCache\CacheInterface;
 use PSX\Http\Environment\HttpResponseInterface;
@@ -51,7 +52,12 @@ class UtilCache extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
     {
-        $key = md5($configuration->get('action') . $request->getMethod() . json_encode($request->getUriFragments()) . json_encode($request->getParameters()));
+        $requestContext = $request->getContext();
+        if ($requestContext instanceof HttpRequest) {
+            $key = md5($configuration->get('action') . $requestContext->getMethod() . json_encode($requestContext->getUriFragments()) . json_encode($requestContext->getParameters()));
+        } else {
+            $key = md5($configuration->get('action') . $requestContext->getMethod());
+        }
 
         $handler  = $this->getCacheHandler($this->connector->getConnection($configuration->get('connection')));
         $response = $handler->get($key);
