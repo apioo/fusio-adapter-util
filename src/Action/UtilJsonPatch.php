@@ -23,11 +23,13 @@ namespace Fusio\Adapter\Util\Action;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
+use Fusio\Engine\Exception\ConfigurationException;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Request;
 use Fusio\Engine\RequestInterface;
+use PSX\Http\Environment\HttpResponse;
 use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Json\Patch;
 use PSX\Record\RecordInterface;
@@ -48,28 +50,52 @@ class UtilJsonPatch extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
     {
-        $body = $request->getPayload();
-
-        $operations = json_decode($configuration->get('patch'));
-        if (!is_array($operations)) {
-            throw new \RuntimeException('JSON patch operations must be an array');
+        $requestPatch = $this->getPatch($configuration->get('patch'));
+        if ($requestPatch instanceof Patch && $request instanceof Request) {
+            $request = $request->withPayload($this->transform($requestPatch, $request->getPayload()));
         }
 
-        $patch = new Patch($operations);
-        if (is_array($body) || $body instanceof \stdClass || $body instanceof RecordInterface) {
-            $body = $patch->patch($body);
+        $response = $this->processor->execute($configuration->get('action'), $request, $context);
+
+        $responsePatch = $this->getPatch($configuration->get('response_patch'));
+        if ($responsePatch instanceof Patch) {
+            if ($response instanceof HttpResponse) {
+                $response = $response->withBody($this->transform($responsePatch, $response->getBody()));
+            } else {
+                $response = $this->transform($responsePatch, $response);
+            }
         }
 
-        if ($request instanceof Request) {
-            $request = $request->withPayload($body);
-        }
-
-        return $this->processor->execute($configuration->get('action'), $request, $context);
+        return $response;
     }
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
         $builder->add($elementFactory->newAction('action', 'Action', 'This action receives the transformed JSON data'));
-        $builder->add($elementFactory->newTextArea('patch', 'Patch', 'json', 'Contains an array of JSON patch operations, more information about JSON patch at https://tools.ietf.org/html/rfc6902'));
+        $builder->add($elementFactory->newTextArea('patch', 'Request-Patch', 'json', 'JSON patch operations to transform the request, more information about JSON patch at https://tools.ietf.org/html/rfc6902'));
+        $builder->add($elementFactory->newTextArea('response_patch', 'Response-Patch', 'json', 'JSON patch operations to transform the response, more information about JSON patch at https://tools.ietf.org/html/rfc6902'));
+    }
+
+    private function getPatch(?string $patch): ?Patch
+    {
+        if (empty($patch)) {
+            return null;
+        }
+
+        $operations = json_decode($patch);
+        if (!is_array($operations)) {
+            throw new ConfigurationException('JSON patch operations must be an array');
+        }
+
+        return new Patch($operations);
+    }
+
+    private function transform(Patch $patch, mixed $body): mixed
+    {
+        if (is_array($body) || $body instanceof \stdClass || $body instanceof RecordInterface) {
+            return $patch->patch($body);
+        } else {
+            return $body;
+        }
     }
 }

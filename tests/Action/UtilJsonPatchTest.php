@@ -60,7 +60,7 @@ class UtilJsonPatchTest extends UtilTestCase
 }
 JSON;
 
-        $patch = <<<JSON
+        $requestPatch = <<<JSON
 [
   { "op": "replace", "path": "/baz", "value": "boo" },
   { "op": "add", "path": "/hello", "value": ["world"] },
@@ -70,14 +70,21 @@ JSON;
 
         $expect = <<<JSON
 {
-  "baz": "boo",
+  "baz": "foo",
   "hello": ["world"]
 }
 JSON;
 
+        $responsePatch = <<<JSON
+[
+  { "op": "replace", "path": "/baz", "value": "foo" }
+]
+JSON;
+
         $parameters = $this->getParameters([
             'action' => 1,
-            'patch' => $patch,
+            'patch' => $requestPatch,
+            'response_patch' => $responsePatch,
         ]);
 
         $request = $this->getRequest();
