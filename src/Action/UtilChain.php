@@ -43,7 +43,7 @@ class UtilChain extends ActionAbstract
         return 'Util-Chain';
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $actions = [
             'a',
