@@ -51,7 +51,7 @@ class UtilCacheTest extends UtilTestCase
 
         $this->getConnectionRepository()->add($connection);
 
-        $action = new Action(1, 'foo', CallbackAction::class, '', false, [
+        $action = new Action(1, 'foo', CallbackAction::class, false, [
             'callback' => function(Response\FactoryInterface $response){
                 // make sure that this is only called once
                 static $count = 0;

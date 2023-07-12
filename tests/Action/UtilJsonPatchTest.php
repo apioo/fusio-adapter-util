@@ -42,7 +42,7 @@ class UtilJsonPatchTest extends UtilTestCase
 {
     protected function setUp(): void
     {
-        $action = new Action(1, 'foo', CallbackAction::class, '', false, [
+        $action = new Action(1, 'foo', CallbackAction::class, false, [
             'callback' => function(Response\FactoryInterface $response, $request){
                 return $response->build(200, [], $request->getPayload());
             },
