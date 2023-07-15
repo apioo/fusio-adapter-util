@@ -21,17 +21,9 @@
 
 namespace Fusio\Adapter\Util\Tests;
 
-use Fusio\Adapter\Util\Action\UtilABTest;
-use Fusio\Adapter\Util\Action\UtilCache;
-use Fusio\Adapter\Util\Action\UtilChain;
-use Fusio\Adapter\Util\Action\UtilDispatchEvent;
-use Fusio\Adapter\Util\Action\UtilJsonPatch;
-use Fusio\Adapter\Util\Action\UtilRedirect;
-use Fusio\Adapter\Util\Action\UtilStaticResponse;
-use Fusio\Engine\Action\Runtime;
+use Fusio\Adapter\Util\Adapter;
 use Fusio\Engine\Test\EngineTestCaseTrait;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\Container;
 
 /**
  * UtilTestCase
@@ -44,14 +36,8 @@ class UtilTestCase extends TestCase
 {
     use EngineTestCaseTrait;
 
-    protected function configure(Runtime $runtime, Container $container): void
+    protected function getAdapterClass(): string
     {
-        $container->set(UtilABTest::class, new UtilABTest($runtime));
-        $container->set(UtilCache::class, new UtilCache($runtime));
-        $container->set(UtilChain::class, new UtilChain($runtime));
-        $container->set(UtilDispatchEvent::class, new UtilDispatchEvent($runtime));
-        $container->set(UtilJsonPatch::class, new UtilJsonPatch($runtime));
-        $container->set(UtilRedirect::class, new UtilRedirect($runtime));
-        $container->set(UtilStaticResponse::class, new UtilStaticResponse($runtime));
+        return Adapter::class;
     }
 }
