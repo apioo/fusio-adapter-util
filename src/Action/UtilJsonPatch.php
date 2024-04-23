@@ -78,7 +78,7 @@ class UtilJsonPatch extends ActionAbstract
 
     private function getPatch(?string $patch): ?Patch
     {
-        if (empty($patch)) {
+        if ($patch === null || $patch === '') {
             return null;
         }
 

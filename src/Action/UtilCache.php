@@ -88,7 +88,7 @@ class UtilCache extends ActionAbstract
             return self::$handler;
         }
 
-        if (empty($connection)) {
+        if ($connection === null || $connection === '') {
             return self::$handler = $this->cache;
         }
 
