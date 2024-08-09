@@ -65,4 +65,21 @@ class UtilTemplateTest extends UtilTestCase
         $this->assertEquals(['content-type' => 'text/xml'], $response->getHeaders());
         $this->assertEquals('<foo>Hello World</foo>', $response->getBody());
     }
+
+    public function testHandleDefaultContentType()
+    {
+        $parameters = $this->getParameters([
+            'statusCode' => 200,
+            'context' => 1,
+            'template' => '<foo>{{ bar }}</foo>',
+        ]);
+
+        $action   = $this->getActionFactory()->factory(UtilTemplate::class);
+        $response = $action->handle($this->getRequest(), $parameters, $this->getContext());
+
+        $this->assertInstanceOf(HttpResponseInterface::class, $response);
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(['content-type' => 'text/html'], $response->getHeaders());
+        $this->assertEquals('<foo>Hello World</foo>', $response->getBody());
+    }
 }
