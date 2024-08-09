@@ -8,6 +8,7 @@ use Fusio\Adapter\Util\Action\UtilDispatchEvent;
 use Fusio\Adapter\Util\Action\UtilJsonPatch;
 use Fusio\Adapter\Util\Action\UtilRedirect;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
+use Fusio\Adapter\Util\Action\UtilTemplate;
 use Fusio\Engine\Adapter\ServiceBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -21,4 +22,5 @@ return static function (ContainerConfigurator $container) {
     $services->set(UtilJsonPatch::class);
     $services->set(UtilRedirect::class);
     $services->set(UtilStaticResponse::class);
+    $services->set(UtilTemplate::class);
 };
