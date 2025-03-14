@@ -32,6 +32,7 @@ use Fusio\Engine\Request\RpcRequestContext;
 use Fusio\Engine\RequestInterface;
 use Psr\SimpleCache\CacheInterface;
 use PSX\Http\Environment\HttpResponseInterface;
+use PSX\Json\Parser;
 use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\Cache\Psr16Cache;
@@ -108,7 +109,7 @@ class UtilCache extends ActionAbstract
     {
         $requestContext = $request->getContext();
         if ($requestContext instanceof HttpRequestContext) {
-            return md5($action . $requestContext->getRequest()->getMethod() . json_encode($requestContext->getParameters()) . json_encode($requestContext->getRequest()->getUri()->getParameters()));
+            return md5($action . $requestContext->getRequest()->getMethod() . Parser::encode($requestContext->getParameters()) . Parser::encode($requestContext->getRequest()->getUri()->getParameters()));
         } elseif ($requestContext instanceof RpcRequestContext) {
             return md5($action . $requestContext->getMethod());
         } else {
